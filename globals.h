@@ -13,7 +13,7 @@
 //#include <glm/gtx/euler_angles.hpp> // For glm::yawPitchRoll
 
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-//#define ProgVersion "Saya V0.7.1"
+#define ProgVersion "Saya V1.0.0"
 
 // Union TWB - pristup k wordu po bytech/
 typedef union {
