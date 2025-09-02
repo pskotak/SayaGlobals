@@ -3,109 +3,18 @@
 
 char PrnBuf[PrnBufLen];
 
-bool QuitRequest;
-bool QuitProgram;
-bool DisplayGui = true;
-
-unsigned int SCR_WIDTH = 1600;
-unsigned int SCR_HEIGHT = 900; // 780;
-
-bool Redraw = false;
-bool RedrawMap = false;
-bool MapActive = false;
-
-uint8_t Screen = MainScreen;
-
-// VFH
-float ObstacleDelta = 0.27; // 0.05; // TODO Nacitat z configu
-float MagnitudeThreshold = 0.95; // V jake vzdalenosti [m] od stredu robota bereme prekazky pro binarizaci histogramu // TODO Nacitat z configu
-
-int GoalSector = 0;
-double GoalDiff = 0.0;
-uint32_t GoalLat;
-uint32_t GoalLon;
-double GoalAngleRad;
-double NavAngle;
-double YawAlpha = 0.2;
-
-TGPSWaypoint CurrentWp;
-double WpThreshold = 3.0; // [m]
-
-// OSM map + nav
-float GoalX;
-float GoalY;
-float GoalAngle;
-
-float OldVisYaw;
-
-// Platform
-float Roll = 0.0;
-float Pitch = 0.0;
-float Yaw = 0.0;
-float YawRad = 0.0;
-
-float Velocity = -10.0;
-float AngularVelocity = 0.0;
-float PosX;
-float PosY;
-float PosZ;
-
-float setVelocity = 0.0;
-float setAngularVelocity = 0.0;
-float omegaL = 0.0;
-float omegaR = 0.0;
-
-float GoYaw = 0.0;
-
-//Joystick joy("/dev/input/js0");
-//bool JoyOK = true;
-
-//bool ManualOverride = false;
-
-//bool BigRedSwitch = false;
-//bool BigRedPressed = false;
-//bool BigRedReleased = false;
-
-//bool MissionPressed = false;
-//bool MissionReleased = false;
-
-// Mission Robo Orienteering
-
-//std::vector <TGPSWaypoint> Cones;
+// unsigned int SCR_WIDTH = 1600;
+// unsigned int SCR_HEIGHT = 900; // 780;
 
 // ----------------------------------------------------------------------------
 std::mutex LocMap_mutex;
-
 std::mutex D455_mutex;
 std::mutex T265_mutex;
 
 glm::vec3 BotPos;
 glm::quat BotOrientation;
 
-bool UpdateCams = false;
-cv::Mat DispRGB_image(D455H,D455W,CV_8UC3);
-cv::Mat depth_image(D455H,D455W,CV_16UC1);
-cv::Mat lmap_depth_image(D455H,D455W,CV_16UC1);
-cv::Mat DispSegmented_image;
-cv::Mat SegBin((SegH/2), SegW, CV_8UC1);
-
-bool UpdateGridMap = false;
-
-float ClosestObstacleLeft = 1E7;
-float ClosestObstacleFront = 1E7;
-float ClosestObstacleRight = 1E7;
-float ClosestObstacle = 1E7;
-
-uint16_t YawPixel;
-bool NewYawPixel = false;
-float VisYaw;
-bool SteerMode = false;
-
-// Logging
-//TRecord LogRec;
-
 // ============================================================================
-
 // output = ( (1 - factor) x input^3 ) + ( factor x input )
 // factor = 1 is linear.
 // 0 < factor < 1 is less sensitive in the center, more sensitive at the ends of throw.
@@ -214,14 +123,14 @@ void CartToPolar(TPolarVector* InV) {
     *InV = V;
 }
 
-float ToRangeDeg(const float a) {
+float ToAngularRangeDeg(const float a) {
     float A = a;
     while (A < 0.0) A = A + 360.0;
     while (A >= 360.0) A = A - 360.0;
     return A;
 }
 
-float ToRange2Pi(const float a) {
+float ToAngularRange2Pi(const float a) {
     float A = a;
     while (A < 0.0) A = A + (2*PI);
     while (A >= (2*PI)) A = A - (2*PI);
@@ -389,12 +298,4 @@ double GPSGoalAngle(const uint32_t InLat1, const uint32_t InLon1, const uint32_t
  double y = std::cos(Lat) * std::sin(Lat1) - std::sin(Lat) * std::cos(Lat1) * std::cos(deltaLon);
  double bearingRad = std::atan2(x,y);
  return bearingRad;
-}
-
-double AngleDiff(const double BotYaw, const double GoalYaw) {
-    return GoalYaw - BotYaw;
-}
-
-int AngleToSector(const float Angle) {
-    return (Angle / ScanStep) + HistCenter;
 }

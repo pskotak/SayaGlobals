@@ -10,45 +10,10 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp> // For glm::quat
-#include <glm/gtx/euler_angles.hpp> // For glm::yawPitchRoll
-
-
-//#include "joystick.h"
+//#include <glm/gtx/euler_angles.hpp> // For glm::yawPitchRoll
 
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 //#define ProgVersion "Saya V0.7.1"
-
-#define PrnBufLen 255
-extern char PrnBuf[PrnBufLen];
-
-extern bool QuitRequest;
-extern bool QuitProgram;
-extern bool DisplayGui;
-
-extern bool Redraw;
-extern bool RedrawMap;
-extern bool MapActive;
-
-#define ODRV_MFGR_ID 0x1209
-#define ODRV_DEV_ID 0x0D32
-
-#define MainScreen 0
-#define SysScreen 10
-#define MapScreen 20
-#define CamScreen 30
-#define RGBScreen 40
-#define SegmentedScreen 45
-#define DepthScreen 50
-
-extern uint8_t Screen;
-
-extern std::mutex D455_mutex;
-extern std::mutex T265_mutex;
-extern bool UpdateCams;
-
-extern std::mutex LocMap_mutex;
-
-// ----------------------------------------------------------------------------
 
 // Union TWB - pristup k wordu po bytech/
 typedef union {
@@ -113,22 +78,16 @@ typedef struct { // 2D bod se vzdalenosti od nejakeho pocatku
 } TPoint2D_D;
 
 typedef struct {
+    float x,y,z;
+} T3Dpoint;
+
+typedef struct {
+    float x,y,z,dist;
+} TScanPoint;
+
+typedef struct {
     uint8_t r,g,b;
 } TRawColor;
-
-extern unsigned int SCR_WIDTH;
-extern unsigned int SCR_HEIGHT;
-
-#define DepthCamScale 0.001 // hloubka je v milimetrech unsigned short (Z16)
-#define D455depth_max 4000.0f // millimeters
-#define DepthCamMaxDistM 4.000 // Maximalni vzdalenost depth v metrech
-
-#define RadDeg 57.295779513082 //57.2957795
-#define DegRad 0.017453292519943 //0.0174532925
-#define PI 3.1415926535897932384626433832795 //3.141592654
-
-#define EarthR_meters 6371000.0 // Earth radius [m]
-#define EarthR 6371.0 // Earth radius [km]
 
 typedef struct {
     double Mag; // Polar Magnitude
@@ -141,7 +100,21 @@ typedef struct {
     uint32_t lat;
     uint32_t lon;
 } TGPSWaypoint;
-//extern std::vector <TGPSWaypoint> Cones;
+
+// ----------------------------------------------------------------------------
+
+#define PrnBufLen 255
+extern char PrnBuf[PrnBufLen];
+
+#define ODRV_MFGR_ID 0x1209
+#define ODRV_DEV_ID 0x0D32
+
+#define RadDeg 57.295779513082 //57.2957795
+#define DegRad 0.017453292519943 //0.0174532925
+#define PI 3.1415926535897932384626433832795 //3.141592654
+
+#define EarthR_meters 6371000.0 // Earth radius [m]
+#define EarthR 6371.0 // Earth radius [km]
 
 // ----------------------------------------------------------------------------
 
@@ -170,6 +143,14 @@ typedef struct {
 // --- Depth Stream FOV ---
 // Horizontal FOV: 89.96 degrees
 // Vertical FOV:   58.99 degrees
+
+extern std::mutex D455_mutex;
+extern std::mutex T265_mutex;
+extern std::mutex LocMap_mutex;
+
+#define DepthCamScale 0.001 // hloubka je v milimetrech unsigned short (Z16)
+#define D455depth_max 4000.0f // millimeters
+#define DepthCamMaxDistM 4.000 // Maximalni vzdalenost depth v metrech
 
 #define SegW 513
 #define SegH 513
@@ -212,96 +193,8 @@ extern bool SteerMode;
 #define PixelAngle (Reduced_HFOV / D455W)
 #define PixelAngleRad ((Reduced_HFOV * DegRad) / D455W)
 
-// Display gui
-#define DispW 1018
-#define DispH 540
-
-#define DispOfs 80
-#define ValOfs 45
-
-#define ExitButtonY (DispH-42)
-#define SideButtonX (DispW-162)
-#define SideButtonW 160
-#define SideButtonH 40
-#define SideButtonStep 42
-
-// VFH
-#define StartAngle -2.35619449f // rad (-135 deg)
-#define EndAngle 2.35619449f // rad (135 deg)
-#define ScanStep 0.003490659f // rad (0.2 deg)
-#define NumSteps 1350
-#define HistCenter (NumSteps/2)
-
-extern float ObstacleDelta; // Jaka odchylka od vektoru oblohy je povazovana za prekazku
-extern float MagnitudeThreshold; // V jake vzdalenosti [m] od stredu robota bereme prekazky pro binarizaci histogramu
-
-extern int GoalSector;
-extern double GoalDiff;
-extern uint32_t GoalLat;
-extern uint32_t GoalLon;
-extern double GoalAngleRad;
-extern double NavAngle;
-extern double YawAlpha;
-
-// OSM map + nav
-extern float GoalX;
-extern float GoalY;
-extern float GoalAngle;
-//extern float GoalAngleRad;
-//extern float NavAngle;
-//extern float YawAlpha;
-extern float OldVisYaw;
-
-#define MapOfsX 35
-#define MapOfsY 35
-
-#define MapEdge 67 // Pixels -> Pixels * MapResolution = MapEdgeLen [meters]
-#define MapCenter 33
-#define MapDiagonal 2.9
-
-// Platform
-extern float Roll;
-extern float Pitch;
-extern float Yaw;
-extern float Velocity;
-extern float AngularVelocity;
-extern float PosX;
-extern float PosY;
-extern float PosZ;
-extern float GoYaw;
-
-extern float YawRad;
-extern TGPSWaypoint CurrentWp;
-extern double WpThreshold; // [m]
-
-extern float setVelocity;
-extern float setAngularVelocity;
-extern float omegaL;
-extern float omegaR;
-
-//extern Joystick joy;
-//extern bool JoyOK;
-
-//extern bool ManualOverride;
-
-//extern bool BigRedSwitch;
-//extern bool BigRedPressed;
-//extern bool BigRedReleased;
-
-//extern bool MissionPressed;
-//extern bool MissionReleased;
-
-//extern float ClosestObstacleLeft;
-//extern float ClosestObstacleFront;
-//extern float ClosestObstacleRight;
-//extern float ClosestObstacle;
-
-extern bool UpdateGridMap;
 extern glm::vec3 BotPos;
 extern glm::quat BotOrientation;
-
-// #define D455W 848
-// #define D455H 480
 
 // Logging
 #define DepthBufSize (D455W*D455H*2)
@@ -337,8 +230,8 @@ extern float CalcGPSBearingDeg(const uint32_t InLat1, const uint32_t InLon1, con
 extern float CalcYawDiff(const float CurrentAngle, const float TargetAngle);
 extern uint32_t GPStoUL(const char *Coord);
 
-extern float ToRangeDeg(const float a);
-extern float ToRange2Pi(const float a);
+extern float ToAngularRangeDeg(const float a);
+extern float ToAngularRange2Pi(const float a);
 extern int ToZeroMax(const int N, const int Max);
 extern float ToPlusMinusJedna(const float R);
 extern long LAbs(long L);
@@ -353,7 +246,5 @@ extern void Circle(int xm, int ym, int r, std::vector<TPoint2D> &pts);
 extern void CircleLim(int xm, int ym, int r, int MinX, int MaxX, int MinY, int MaxY, std::vector<TPoint2DInt> &pts);
 
 extern double GPSGoalAngle(const uint32_t InLat1, const uint32_t InLon1, const uint32_t InLat2, const uint32_t InLon2);
-extern double AngleDiff(const double BotYaw, const double GoalYaw);
-extern int AngleToSector(const float Angle);
 
 #endif
