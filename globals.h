@@ -13,7 +13,7 @@
 //#include <glm/gtx/euler_angles.hpp> // For glm::yawPitchRoll
 
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-#define ProgVersion "Saya V1.0.0"
+#define ProgVersion "Saya V1.0.1"
 
 // Union TWB - pristup k wordu po bytech/
 typedef union {
@@ -202,7 +202,7 @@ extern glm::quat BotOrientation;
 #define LogRGBBufSize ((D455W)*(D455H)*3)
 #define LogDepthBufSize ((D455W)*(D455H)*2)
 typedef struct {
-    uint32_t RecNo; // Record number            
+    uint32_t RecNo; // Record number
     float Roll;
     float Pitch;
     float Yaw;
@@ -242,6 +242,7 @@ extern void Bresenham(int X1, int Y1, int X2, int Y2, std::vector<TPoint2D> &pts
 extern void BresenhamLim(int X1, int Y1, int X2, int Y2, int Min, int Max, std::vector<TPoint2D> &pts);
 extern void BresenhamLim2(int X1, int Y1, int X2, int Y2, int Min, int Max, std::vector<TPoint2D> &pts);
 extern void BresenhamLim3(int X1, int Y1, int X2, int Y2, int MinX, int MaxX, int MinY, int MaxY, std::vector<TPoint2DInt> &pts);
+//extern TPoint2D BresenhamLimObstacle(int X1, int Y1, int X2, int Y2, int Min, int Max);
 extern void Circle(int xm, int ym, int r, std::vector<TPoint2D> &pts);
 extern void CircleLim(int xm, int ym, int r, int MinX, int MaxX, int MinY, int MaxY, std::vector<TPoint2DInt> &pts);
 
