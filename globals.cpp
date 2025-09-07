@@ -137,6 +137,13 @@ float ToAngularRange2Pi(const float a) {
     return A;
 }
 
+float ToAngularRangePlusMinusPi(const float a) {
+    float A = a;
+    while (A < -PI) A = A + PI;
+    while (A >= PI) A = A - PI;
+    return A;
+}
+
 int ToZeroMax(const int N, const int Max) {
     int n = N;
     if (n < 0) n = 0;

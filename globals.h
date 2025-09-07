@@ -232,6 +232,7 @@ extern uint32_t GPStoUL(const char *Coord);
 
 extern float ToAngularRangeDeg(const float a);
 extern float ToAngularRange2Pi(const float a);
+extern float ToAngularRangePlusMinusPi(const float a);
 extern int ToZeroMax(const int N, const int Max);
 extern float ToPlusMinusJedna(const float R);
 extern long LAbs(long L);
