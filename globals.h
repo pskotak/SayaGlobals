@@ -77,9 +77,9 @@ typedef struct { // 2D bod se vzdalenosti od nejakeho pocatku
     float dist;
 } TPoint2D_D;
 
-typedef struct {
-    float x,y,z;
-} T3Dpoint;
+// typedef struct {
+//     float x,y,z;
+// } T3Dpoint;
 
 typedef struct {
     float x,y,z,dist;
