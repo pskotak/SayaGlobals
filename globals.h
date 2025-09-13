@@ -13,7 +13,7 @@
 //#include <glm/gtx/euler_angles.hpp> // For glm::yawPitchRoll
 
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-#define ProgVersion "Saya V1.0.1"
+#define ProgVersion "Saya V1.1.0"
 
 // Union TWB - pristup k wordu po bytech/
 typedef union {
@@ -147,6 +147,13 @@ extern char PrnBuf[PrnBufLen];
 extern std::mutex D455_mutex;
 extern std::mutex T265_mutex;
 extern std::mutex LocMap_mutex;
+
+extern bool BigRedSwitch;
+extern bool BigRedPressed;
+extern bool BigRedReleased;
+
+extern bool MissionPressed;
+extern bool MissionReleased;
 
 #define DepthCamScale 0.001 // hloubka je v milimetrech unsigned short (Z16)
 #define D455depth_max 4000.0f // millimeters

@@ -11,6 +11,13 @@ std::mutex LocMap_mutex;
 std::mutex D455_mutex;
 std::mutex T265_mutex;
 
+bool BigRedSwitch = false;
+bool BigRedPressed = false;
+bool BigRedReleased = false;
+
+bool MissionPressed = false;
+bool MissionReleased = false;
+
 glm::vec3 BotPos;
 glm::quat BotOrientation;
 
