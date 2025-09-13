@@ -13,7 +13,7 @@
 //#include <glm/gtx/euler_angles.hpp> // For glm::yawPitchRoll
 
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-#define ProgVersion "Saya V1.1.0"
+#define ProgVersion "Saya V1.2.0"
 
 // Union TWB - pristup k wordu po bytech/
 typedef union {
@@ -208,23 +208,23 @@ extern glm::quat BotOrientation;
 #define RGBBufSize (D455W*D455H*3)
 #define LogRGBBufSize ((D455W)*(D455H)*3)
 #define LogDepthBufSize ((D455W)*(D455H)*2)
-typedef struct {
-    uint32_t RecNo; // Record number
-    float Roll;
-    float Pitch;
-    float Yaw;
-    float Velocity;
-    float AngularVelocity;
-    float PosX;
-    float PosY;
-    float PosZ;
-    float setVelocity;
-    float setAngularVelocity;
-    float omegaL;
-    float omegaR;
-    unsigned char DepthData[DepthBufSize]; // Raw depth image buffer
-    unsigned char RGBData[RGBBufSize]; // Raw RGB image buffer
-} TRecord;
+// typedef struct {
+//     uint32_t RecNo; // Record number
+//     float Roll;
+//     float Pitch;
+//     float Yaw;
+//     float Velocity;
+//     float AngularVelocity;
+//     float PosX;
+//     float PosY;
+//     float PosZ;
+//     float setVelocity;
+//     float setAngularVelocity;
+//     float omegaL;
+//     float omegaR;
+//     unsigned char DepthData[DepthBufSize]; // Raw depth image buffer
+//     unsigned char RGBData[RGBBufSize]; // Raw RGB image buffer
+// } TRecord;
 //extern TRecord LogRec;
 
 // ============================================================================
